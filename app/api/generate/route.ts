@@ -48,7 +48,7 @@ async function* streamClaude(
   const client = new Anthropic({ apiKey });
   const stream = client.messages.stream({
     model: 'claude-opus-4-5',
-    max_tokens: 4000,
+    max_tokens: 16000,
     system: systemPrompt,
     messages: messages as Parameters<typeof client.messages.stream>[0]['messages'],
     stream: true,
@@ -90,7 +90,7 @@ async function* streamOpenAI(
 
   const stream = await client.chat.completions.create({
     model: 'gpt-4o',
-    max_tokens: 4000,
+    max_tokens: 16000,
     messages: oaiMessages,
     stream: true,
   });

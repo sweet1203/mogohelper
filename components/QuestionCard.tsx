@@ -35,8 +35,8 @@ export default function QuestionCard({ question, index, showExplanation = false 
         </p>
       </div>
 
-      {/* 변경 포인트 */}
-      {question.change_summary && (
+      {/* 변경 포인트 — 채점 후에만 표시 */}
+      {showExplanation && question.change_summary && (
         <div className="mx-5 mb-4 flex items-start gap-2 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-800">
           <ArrowLeftRight className="mt-0.5 h-4 w-4 shrink-0 text-amber-500" />
           <span>{question.change_summary}</span>

@@ -187,7 +187,8 @@ export default function MathPage() {
           {/* 이미지 업로드 */}
           {!result && (
             <section className="rounded-2xl bg-white p-4 shadow-sm">
-              <p className="mb-3 text-sm font-semibold text-gray-700">문제 사진 (최대 3장)</p>
+              <p className="text-sm font-semibold text-gray-700">문제 사진 (최대 3장)</p>
+              <p className="mb-3 mt-0.5 text-xs text-amber-600">⚠️ 한 사진에 한 문제씩 올려주세요. 여러 문제가 있으면 정확도가 떨어집니다.</p>
               <div className="flex flex-wrap gap-3">
                 {images.map((img, i) => (
                   <div key={i} className="relative h-24 w-24 overflow-hidden rounded-xl border border-gray-200">

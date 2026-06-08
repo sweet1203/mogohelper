@@ -21,7 +21,7 @@ const VARIANT_TYPES: Record<Subject, string[]> = {
   수학: [],
 };
 
-const COUNT_OPTIONS = [1, 2, 3, 5, 8, 10];
+const COUNT_OPTIONS = [1, 2];
 
 const EMPTY_FILES: UploadedFiles = { mode: 'pdf', pdf: null, images: [] };
 
@@ -31,7 +31,7 @@ export default function HomePage() {
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFiles>(EMPTY_FILES);
   const subject: Subject = '영어';
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-  const [count, setCount] = useState(5);
+  const [count, setCount] = useState(1);
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState('');
 
