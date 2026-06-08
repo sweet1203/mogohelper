@@ -96,17 +96,12 @@ export function buildUserPrompt(
   variantTypes: string[],
   count: number,
   englishMode: EnglishMode,
-  questionRange?: { from: number; to: number }
 ): string {
-  const rangeText = questionRange
-    ? `${questionRange.from}번~${questionRange.to}번 문제를 대상으로`
-    : '전체 문제를 대상으로';
-
   if (englishMode === 'analysis') {
     return `아래 모의고사 텍스트를 분석하여 문법·어휘·숙어·해설을 제공해주세요.
 
 [조건]
-- ${rangeText} 분석
+- 업로드한 내용을 대상으로 분석
 - 문법 요소: 중요한 문법 포인트 3~5개
 - 어휘: 핵심 어휘 5~8개 (고난도 또는 수능 빈출)
 - 숙어: 숙어/관용 표현 3~5개
@@ -122,7 +117,7 @@ ${pdfText.slice(0, 12000)}`;
   return `아래 모의고사 텍스트를 분석하여 변형문제 ${count}개를 생성해주세요.
 
 [조건]
-- ${rangeText} ${count}개 변형문제 생성
+- 업로드한 내용을 대상으로 ${count}개 변형문제 생성
 - ${typesText}
 - 각 문제는 독립적으로 풀 수 있어야 함
 

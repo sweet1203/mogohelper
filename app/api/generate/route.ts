@@ -229,12 +229,7 @@ export async function POST(req: NextRequest) {
     const englishMode = (formData.get('englishMode') as EnglishMode | null) ?? 'variant';
     const variantTypes: string[] = JSON.parse((formData.get('variantTypes') as string) || '[]');
     const count = parseInt((formData.get('count') as string) || '3', 10);
-    const questionFromRaw = formData.get('questionFrom') as string | null;
-    const questionToRaw = formData.get('questionTo') as string | null;
     const inputMode = formData.get('inputMode') as 'pdf' | 'image';
-    const questionRange = (questionFromRaw && questionToRaw)
-      ? { from: parseInt(questionFromRaw), to: parseInt(questionToRaw) }
-      : undefined;
 
     if (!subject) return NextResponse.json({ error: '과목을 선택해주세요.' }, { status: 400 });
 
@@ -299,7 +294,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const userPrompt = buildUserPrompt(pdfText, variantTypes, count, englishMode, questionRange);
+    const userPrompt = buildUserPrompt(pdfText, variantTypes, count, englishMode);
     const messages = [{ role: 'user' as const, content: userPrompt }];
 
     return new Response(
