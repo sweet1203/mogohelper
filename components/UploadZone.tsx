@@ -178,7 +178,7 @@ export default function UploadZone({ value, onChange }: UploadZoneProps) {
           </div>
           <div className="text-center">
             <p className="font-semibold text-gray-800">PDF 시험지</p>
-            <p className="text-xs text-gray-400">전체 or 한 장</p>
+            <p className="text-xs text-gray-400">1페이지씩 올려주세요</p>
           </div>
         </button>
 
@@ -191,7 +191,7 @@ export default function UploadZone({ value, onChange }: UploadZoneProps) {
           </div>
           <div className="text-center">
             <p className="font-semibold text-gray-800">사진 캡처</p>
-            <p className="text-xs text-gray-400">스크린샷 최대 5장</p>
+            <p className="text-xs text-gray-400">1문제씩 · 최대 5장</p>
           </div>
         </button>
       </div>
@@ -209,8 +209,12 @@ export default function UploadZone({ value, onChange }: UploadZoneProps) {
         onDrop={handleDrop}
       >
         <Upload className="h-4 w-4" />
-        PDF 또는 이미지를 여기에 드래그하세요
+        PDF(1페이지) 또는 이미지(1문제씩)를 드래그하세요
       </div>
+
+      <p className="text-center text-xs text-amber-700">
+        전체 시험지보다 <strong>한 페이지·한 문제씩</strong> 올리면 더 정확합니다.
+      </p>
 
       <input ref={pdfRef} type="file" accept="application/pdf" className="hidden" onChange={handlePdfChange} />
       <input ref={imgRef} type="file" accept="image/*" multiple className="hidden" onChange={handleImgChange} />

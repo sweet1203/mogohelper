@@ -32,8 +32,6 @@ export default function HomePage() {
   const subject: Subject = '영어';
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [count, setCount] = useState(5);
-  const [questionFrom, setQuestionFrom] = useState('');
-  const [questionTo, setQuestionTo] = useState('');
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState('');
 
@@ -74,8 +72,6 @@ export default function HomePage() {
       formData.append('variantTypes', JSON.stringify(selectedTypes));
       formData.append('count', String(count));
       formData.append('inputMode', uploadedFiles.mode);
-      if (questionFrom) formData.append('questionFrom', questionFrom);
-      if (questionTo) formData.append('questionTo', questionTo);
 
       if (uploadedFiles.mode === 'pdf' && uploadedFiles.pdf) {
         formData.append('pdf', uploadedFiles.pdf);
@@ -337,29 +333,6 @@ export default function HomePage() {
                         {c}개
                       </button>
                     ))}
-                  </div>
-                </div>
-                <div>
-                  <p className="mb-2 text-sm font-medium text-gray-600">문제 번호 범위 (선택)</p>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="number"
-                      placeholder="시작"
-                      value={questionFrom}
-                      onChange={(e) => setQuestionFrom(e.target.value)}
-                      className="h-11 w-24 rounded-xl border-2 border-gray-200 px-3 text-center text-sm outline-none focus:border-blue-400"
-                      min="1"
-                    />
-                    <span className="text-gray-400">~</span>
-                    <input
-                      type="number"
-                      placeholder="끝"
-                      value={questionTo}
-                      onChange={(e) => setQuestionTo(e.target.value)}
-                      className="h-11 w-24 rounded-xl border-2 border-gray-200 px-3 text-center text-sm outline-none focus:border-blue-400"
-                      min="1"
-                    />
-                    <span className="text-sm text-gray-400">번</span>
                   </div>
                 </div>
               </div>
