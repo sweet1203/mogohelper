@@ -42,7 +42,7 @@ export function buildDocTitle(subject: Subject, englishMode?: EnglishMode): stri
     String(today.getDate()).padStart(2, '0');
 
   const label =
-    subject === '수학' ? '수학해설' :
+    subject === '수학' ? '문제해설' :
     englishMode === 'analysis' ? '영어해설' : '영어변형문제';
 
   const seq = getDailySequence();
