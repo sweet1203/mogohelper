@@ -5,14 +5,13 @@ import { useRouter } from 'next/navigation';
 import {
   ChevronLeft, FileText, Trash2, ExternalLink,
   BookMarked, Loader2, ChevronDown, ChevronUp,
-  RotateCcw, AlertCircle, ImageDown, FileDown, ScrollText,
+  RotateCcw, AlertCircle, FileDown, ScrollText,
   BookOpen, Shuffle,
 } from 'lucide-react';
 import {
   getBankSets, deleteBankSet, updateBankSet, type SavedSet,
 } from '@/lib/question-bank';
 import { saveSession } from '@/lib/local-storage';
-import { exportAsImage } from '@/lib/export-image';
 import { exportAsTxt } from '@/lib/export-txt';
 import { getAppsScriptUrl, exportViaAppsScript } from '@/lib/apps-script';
 import { Badge } from '@/components/ui/badge';
@@ -30,7 +29,6 @@ const SUBJECT_COLORS: Record<Subject, string> = {
 export default function SavedPage() {
   const router = useRouter();
   const [sets, setSets] = useState<SavedSet[]>([]);
-  const [imgSavingId, setImgSavingId] = useState<string | null>(null);
   const [scriptExportingId, setScriptExportingId] = useState<string | null>(null);
   const [hasScriptUrl, setHasScriptUrl] = useState(false);
   const [expanded, setExpanded] = useState<string | null>(null);
@@ -39,19 +37,6 @@ export default function SavedPage() {
     setSets(getBankSets());
     setHasScriptUrl(!!getAppsScriptUrl());
   }, []);
-
-  const handleImageExport = async (set: SavedSet) => {
-    setImgSavingId(set.id);
-    try {
-      await exportAsImage(set);
-      toast.success('이미지로 저장되었습니다!');
-    } catch (err) {
-      console.error(err);
-      toast.error('이미지 저장에 실패했습니다.');
-    } finally {
-      setImgSavingId(null);
-    }
-  };
 
   const handleTxtExport = (set: SavedSet) => {
     try {
@@ -271,16 +256,6 @@ export default function SavedPage() {
                       className="flex flex-1 items-center justify-center gap-1.5 py-2.5 text-xs text-gray-600 hover:bg-gray-100">
                       <FileDown className="h-3.5 w-3.5" />
                       TXT
-                    </button>
-                    <div className="h-6 w-px bg-gray-200" />
-                    <button
-                      onClick={() => handleImageExport(set)}
-                      disabled={imgSavingId === set.id}
-                      className="flex flex-1 items-center justify-center gap-1.5 py-2.5 text-xs text-emerald-700 hover:bg-emerald-50 disabled:opacity-50">
-                      {imgSavingId === set.id
-                        ? <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                        : <ImageDown className="h-3.5 w-3.5" />}
-                      이미지
                     </button>
                     <div className="h-6 w-px bg-gray-200" />
                     <button

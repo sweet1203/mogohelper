@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import MultipleChoice from '@/components/MultipleChoice';
 import QuestionCard from '@/components/QuestionCard';
+import ResultActions from '@/components/ResultActions';
 import { loadSession } from '@/lib/local-storage';
 import { ChevronLeft, ChevronRight, BookOpen, Check, PenLine, PenOff } from 'lucide-react';
 import { toast } from 'sonner';
@@ -212,6 +213,9 @@ export default function PracticePage() {
             </div>
           )}
         </div>
+
+        {/* 결과 메뉴 (구글문서 상태 · 텍스트 저장 · 새 문제) */}
+        <ResultActions savedSetId={session.savedSetId} />
 
         {/* 탭 콘텐츠 */}
         <div className="flex-1 overflow-y-auto">

@@ -129,10 +129,10 @@ export default function HomePage() {
             );
             const analysis = json.analysis ?? null;
             const docTitle = buildDocTitle(subject, englishMode);
-            saveSession({ questions, subject, pdfFileName: json.pdfFileName, analysis, englishMode });
             const savedSet = englishMode === 'variant'
               ? saveBankSet({ title: docTitle, subject, pdfFileName: json.pdfFileName, questions, englishMode })
               : saveBankSet({ title: docTitle, subject, pdfFileName: json.pdfFileName, questions: [], englishMode, analysis });
+            saveSession({ questions, subject, pdfFileName: json.pdfFileName, analysis, englishMode, savedSetId: savedSet.id });
 
             router.push('/practice');
 
@@ -191,8 +191,8 @@ export default function HomePage() {
             📐
           </div>
           <div className="flex-1 text-white">
-            <p className="text-lg font-bold">수학 해설</p>
-            <p className="text-sm text-orange-100">문제 사진 → 풀이 + 개념 + 포인트</p>
+            <p className="text-lg font-bold">수학·과학 해설</p>
+            <p className="text-sm text-orange-100">수학·물리·화학·생명 사진 → 풀이 + 개념</p>
           </div>
           <ChevronRight className="h-5 w-5 text-white/70" />
         </button>

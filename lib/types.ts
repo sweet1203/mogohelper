@@ -91,4 +91,5 @@ export interface SessionData {
   pdfFileName: string;
   analysis?: EnglishAnalysis;
   englishMode?: EnglishMode;
+  savedSetId?: string;
 }

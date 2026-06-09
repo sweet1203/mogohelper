@@ -4,10 +4,10 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { ChevronLeft, Loader2, Camera, ChevronDown, ChevronUp, Lightbulb, Target, BookOpen } from 'lucide-react';
-import { getApiKey } from '@/lib/local-storage';
 import { getProviderConfig } from '@/lib/ai-provider';
 import { saveBankSet, updateBankSet } from '@/lib/question-bank';
 import { getAppsScriptUrl, exportViaAppsScript, buildDocTitle } from '@/lib/apps-script';
+import ResultActions from '@/components/ResultActions';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import type { MathAnalysis } from '@/lib/types';
@@ -18,7 +18,7 @@ type ImageFile = { file: File; preview: string };
 
 const MATH_RESULT_KEY = 'app_math_result';
 
-function loadMathResult(): { result: MathAnalysis; fileName: string } | null {
+function loadMathResult(): { result: MathAnalysis; fileName: string; setId?: string } | null {
   if (typeof window === 'undefined') return null;
   try {
     const raw = localStorage.getItem(MATH_RESULT_KEY);
@@ -26,8 +26,8 @@ function loadMathResult(): { result: MathAnalysis; fileName: string } | null {
   } catch { return null; }
 }
 
-function saveMathResult(result: MathAnalysis, fileName: string) {
-  localStorage.setItem(MATH_RESULT_KEY, JSON.stringify({ result, fileName }));
+function saveMathResult(result: MathAnalysis, fileName: string, setId?: string) {
+  localStorage.setItem(MATH_RESULT_KEY, JSON.stringify({ result, fileName, setId }));
 }
 
 export default function MathPage() {
@@ -37,6 +37,7 @@ export default function MathPage() {
   const [progress, setProgress] = useState('');
   const [result, setResult] = useState<MathAnalysis | null>(null);
   const [fileName, setFileName] = useState('');
+  const [savedSetId, setSavedSetId] = useState<string | undefined>(undefined);
   const [canvasOpen, setCanvasOpen] = useState(false);
   const [openSection, setOpenSection] = useState<'explanation' | 'concepts' | 'points'>('explanation');
 
@@ -46,6 +47,7 @@ export default function MathPage() {
     if (saved && !result) {
       setResult(saved.result);
       setFileName(saved.fileName);
+      setSavedSetId(saved.setId);
     }
   }, []);
 
@@ -118,8 +120,6 @@ export default function MathPage() {
             setResult(json.math);
             setFileName(json.fileName ?? '');
             setOpenSection('explanation');
-            // 로컬 저장 (영구)
-            saveMathResult(json.math, json.fileName ?? '');
             const docTitle = buildDocTitle('수학');
             const savedSet = saveBankSet({
               title: docTitle,
@@ -128,6 +128,9 @@ export default function MathPage() {
               questions: [],
               mathAnalysis: json.math,
             });
+            setSavedSetId(savedSet.id);
+            // 로컬 저장 (영구)
+            saveMathResult(json.math, json.fileName ?? '', savedSet.id);
             // 구글 문서 자동 저장 (백그라운드)
             const scriptUrl = getAppsScriptUrl();
             if (scriptUrl) {
@@ -169,8 +172,8 @@ export default function MathPage() {
             <ChevronLeft className="h-5 w-5 text-gray-500" />
           </button>
           <div className="flex-1">
-            <h1 className="text-lg font-bold text-gray-900">수학 해설</h1>
-            <p className="text-xs text-gray-400">문제 사진을 올리면 AI가 풀어드려요</p>
+            <h1 className="text-lg font-bold text-gray-900">수학·과학 해설</h1>
+            <p className="text-xs text-gray-400">수학·물리·화학·생명 문제 사진을 올리면 AI가 풀어드려요</p>
           </div>
           <button
             onClick={() => setCanvasOpen(p => !p)}
@@ -225,13 +228,21 @@ export default function MathPage() {
           {/* 결과 */}
           {result && (
             <>
-              <div className="flex items-center gap-3">
-                <p className="flex-1 truncate text-sm text-gray-500">{fileName}</p>
-                <button onClick={() => { setResult(null); setImages([]); }}
-                  className="rounded-xl bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-200">
-                  새 문제
-                </button>
+              {/* 결과 메뉴 (구글문서 상태 · 텍스트 저장 · 새 문제) */}
+              <div className="-mx-4 -mt-4">
+                <ResultActions
+                  savedSetId={savedSetId}
+                  newLabel="새 문제 풀기"
+                  onNew={() => {
+                    setResult(null);
+                    setImages([]);
+                    setSavedSetId(undefined);
+                    localStorage.removeItem(MATH_RESULT_KEY);
+                  }}
+                />
               </div>
+
+              <p className="truncate text-sm text-gray-500">{fileName}</p>
 
               {/* 단계별 풀이 */}
               <ResultSection
